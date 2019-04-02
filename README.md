@@ -165,3 +165,9 @@ node bwfr.js ./__tests__/audio.bwf
 
 - reach me :-)
 - Or submit a PR
+
+```
+npm test
+npm version patch
+npm publish
+```
