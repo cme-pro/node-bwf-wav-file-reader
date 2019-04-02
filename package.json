@@ -1,0 +1,38 @@
+{
+  "name": "node-bwf-wav-file-reader",
+  "version": "1.0.0",
+  "description": "Lightweight Node.js BWF and WAV file reader",
+  "main": "bwf-wav-file-reader.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/cme-pro/node-bwf-wav-file-reader.git"
+  },
+  "keywords": [
+    "wav",
+    "wav meta",
+    "wav reader",
+    "wav file reader",
+    "bwf",
+    "bwf meta",
+    "bwf reader",
+    "bwf file reader",
+    "meta",
+    "reader",
+    "file reader",
+    "meta",
+    "RIFF"
+  ],
+  "author": "Martin RATINAUD <martinratinaud@gmail.com>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/cme-pro/node-bwf-wav-file-reader/issues"
+  },
+  "homepage": "https://github.com/cme-pro/node-bwf-wav-file-reader",
+  "devDependencies": {
+    "babel-eslint": "^10.0.1",
+    "eslint": "^5.16.0",
+    "eslint-config-prettier": "^4.1.0",
+    "eslint-plugin-prettier": "^3.0.1",
+    "prettier": "1.16.4"
+  }
+}
