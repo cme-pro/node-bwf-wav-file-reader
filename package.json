@@ -1,6 +1,6 @@
 {
   "name": "node-bwf-wav-file-reader",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Lightweight Node.js BWF and WAV file reader",
   "main": "bwf-wav-file-reader.js",
   "repository": {
