@@ -1,4 +1,4 @@
-var { read: readBwf } = require('./bwf-wav-file-reader.js');
+var { read: readBwf } = require('./dist/bwf-wav-file-reader.js');
 
 var [, , filename] = process.argv;
 

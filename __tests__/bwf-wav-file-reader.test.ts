@@ -1,6 +1,6 @@
-const { readSync: readSyncBwf, read: readBwf } = require('./bwf-wav-file-reader');
+import * as bwfWavFileReader from '../src/bwf-wav-file-reader';
 
-const FILE_PATH = './test/audio.bwf';
+const FILE_PATH = '__tests__/audio.bwf';
 const DURATION = 27.391986111111112;
 const RESULT = {
   chunkId: 'RIFF',
@@ -46,24 +46,22 @@ const RESULT = {
 const RESULT_KEYS = Object.keys(RESULT);
 
 test('read bwf file with async', async () => {
-  const info = await readSyncBwf(FILE_PATH);
+  const info = await bwfWavFileReader.readSync(FILE_PATH);
 
   expect(info.duration).toBe(DURATION);
 
   for (var i = 0; i < RESULT_KEYS.length; i++) {
     const key = RESULT_KEYS[i];
-    const val = RESULT[key];
     expect(info.result[key]).toBe(RESULT[key]);
   }
 });
 
 test('read bwf file with cb', async done => {
-  readBwf('./test/audio.bwf', function(err, info) {
+  bwfWavFileReader.read(FILE_PATH, function(err, info) {
     expect(info.duration).toBe(DURATION);
 
     for (var i = 0; i < RESULT_KEYS.length; i++) {
       const key = RESULT_KEYS[i];
-      const val = RESULT[key];
       expect(info.result[key]).toBe(RESULT[key]);
     }
     done();

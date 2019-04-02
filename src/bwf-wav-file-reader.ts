@@ -1,4 +1,4 @@
-const fs = require('fs');
+import * as fs from 'fs';
 
 const supportedAudioFormatCodes = [
   1, // Wav
@@ -18,7 +18,59 @@ const BWF_ORIGINATOR_REF_LEN = 32;
 const BWF_ORIGINATOR_DAT_LEN = 10;
 const BWF_ORIGINATOR_TIM_LEN = 8;
 
-const READS = [
+type InterfaceRead = [string, 'string' | 'int16' | 'int32' | 'uint16' | 'uint32', number];
+
+interface InterfaceResult {
+  chunkId?: string;
+  chunkSize?: number;
+  format?: string;
+  subChunkFormatId?: string;
+  subChunkFormatSize?: string;
+  audioFormat?: number;
+  numChannels?: number;
+  sampleRate?: number;
+  byteRate?: number;
+  blockAlign?: number;
+  bitsPerSample?: number;
+  subChunkListId?: string;
+  subChunkListSize?: number;
+  subChunkInfoId?: string;
+  subChunkInamId?: string;
+  subChunkInamSize?: number;
+  subChunkInamData?: string;
+  subChunkIsftId?: string;
+  subChunkIsftSize?: number;
+  subChunkIsftData?: string;
+  subChunkIartId?: string;
+  subChunkIartSize?: number;
+  subChunkIartData?: string;
+  subChunkBextId?: string;
+  subChunkBextSize?: number;
+  Description?: string;
+  Originator?: string;
+  OriginatorReference?: string;
+  OriginationDate?: string;
+  OriginationTime?: string;
+  TimeReferenceLow?: number;
+  TimeReferenceHigh?: number;
+  Version?: number;
+  UMID?: string;
+  LoudnessValue?: number;
+  LoudnessRange?: number;
+  MaxTruePeakLevel?: number;
+  MaxMomentaryLoudness?: number;
+  MaxShortTermLoudness?: number;
+}
+
+interface InterfaceReturn {
+  error?: boolean;
+  invalidReasons?: string[];
+  duration?: number;
+  result: InterfaceResult;
+  stats: any;
+}
+
+const READS: InterfaceRead[] = [
   // Riff Wave Header
   ['chunkId', 'string', 4], // 0-3 (4 octets) : Constante «RIFF»  (0x52,0x49,0x46,0x46)
   ['chunkSize', 'int32', 4], // 4-7 (4 octets) : Taille du fichier moins 8 octets
@@ -81,8 +133,8 @@ const READS = [
   // char CodingHistory[64+2];// History coding (JDS set to fixed size, realign on 4 bytes)
 ];
 
-const postProcess = (stats, readResult, cb) => {
-  const error = false;
+const postProcess = (stats: any, readResult: InterfaceResult, cb: (err: any, result: InterfaceReturn) => void) => {
+  let error = false;
   const invalidReasons = [];
 
   if (readResult.chunkId !== 'RIFF') invalidReasons.push('Expected "RIFF" string at 0');
@@ -93,7 +145,7 @@ const postProcess = (stats, readResult, cb) => {
   if (invalidReasons.length > 0) error = true;
 
   if (error) {
-    return cb({
+    return cb(new Error(invalidReasons.join(';')), {
       error: true,
       invalidReasons,
       result: readResult,
@@ -108,19 +160,19 @@ const postProcess = (stats, readResult, cb) => {
   });
 };
 
-const read = (filename, cb) => {
+export const read = (filename: string, cb: (err: any, result?: any) => void) => {
   const stats = fs.statSync(filename);
   const bufferSize = READS.reduce((acc, [, , size]) => acc + size, 0);
   const buffer = Buffer.alloc(bufferSize);
 
-  fs.open(filename, 'r', (openErr, fd) => {
+  fs.open(filename, 'r', (openErr: any, fd: any) => {
     if (openErr) {
       console.error(openErr);
       return cb(openErr);
     }
 
-    const readResult = {};
-    fs.read(fd, buffer, 0, bufferSize, 0, err => {
+    const readResult: InterfaceResult = {};
+    fs.read(fd, buffer, 0, bufferSize, 0, (err: any) => {
       if (err) {
         console.error(err);
         return cb(err);
@@ -135,11 +187,11 @@ const read = (filename, cb) => {
         if (type === 'string') {
           readResult[name] = buffer.toString('ascii', pointer, pointer + value).replace(/\0/g, '');
         } else if (type === 'uint16') {
-          readResult[name] = buffer.readUInt16LE(pointer, value / 2);
+          readResult[name] = buffer.readUInt16LE(pointer);
         } else if (type === 'int32') {
-          readResult[name] = buffer.readInt32LE(pointer, value / 4);
+          readResult[name] = buffer.readInt32LE(pointer);
         } else if (type === 'uint32') {
-          readResult[name] = buffer.readUInt32LE(pointer, value / 4);
+          readResult[name] = buffer.readUInt32LE(pointer);
         }
         pointer += value;
 
@@ -155,16 +207,11 @@ const read = (filename, cb) => {
   });
 };
 
-const readSync = async filename => {
+export const readSync = async (filename: string): Promise<any> => {
   return new Promise((resolve, reject) => {
     read(filename, (err, info) => {
       if (err) reject(err);
       resolve(info);
     });
   });
-};
-
-module.exports = {
-  read,
-  readSync,
 };

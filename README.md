@@ -10,30 +10,55 @@ A lightweight module that parses WAV or BWF information data from a wav file int
 - Detecting the number of channels in a .wav or .bwf file
 - Retrieving the file information, including file size, created date etc
 
-## Node usage
+## Usage
 
 ```
 npm install node-bwf-wav-file-reader --save
+# or
+yarn install node-bwf-wav-file-reader
 ```
 
-Sync:
+### Node Synchronous
 
 ```javascript
 const { read: readBwf } = require('node-bwf-wav-file-reader');
 
-readBwf('./test/audio.bwf', function(err, info) {
+readBwf('./__tests__/audio.bwf', function(err, info) {
   if (err) console.error(err, info);
   else console.log(info);
 });
 ```
 
-or async
+### Node Asynchronous
 
 ```javascript
 const { readSync: readSyncBwf } = require('node-bwf-wav-file-reader');
 
 (async () => {
-  const info = await readSyncBwf();
+  const info = await readSyncBwf('./__tests__/audio.bwf');
+  console.log(info);
+})();
+```
+
+### Typescript Synchronous
+
+```typescript
+import * as bwfWavFileReader from 'node-bwf-wav-file-reader';
+
+bwfWavFileReader.read('./__tests__/audio.bwf', function(err, info) {
+  if (err) console.error(err, info);
+  else console.log(info);
+});
+```
+
+### Typescript Asynchronous
+
+```typescript
+import * as bwfWavFileReader from 'node-bwf-wav-file-reader';
+
+(async () => {
+  const info = await bwfWavFileReader.readSync('./__tests__/audio.bwf');
+
   console.log(info);
 })();
 ```
@@ -125,7 +150,7 @@ if `err` is not null, the WAV file is valid.
 From the command line you can run:
 
 ```
-node bwfr.js ./test/audio.bwf
+node bwfr.js ./__tests__/audio.bwf
 ```
 
 ### TODO
