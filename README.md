@@ -23,7 +23,7 @@ yarn install node-bwf-wav-file-reader
 ```javascript
 const { read: readBwf } = require('node-bwf-wav-file-reader');
 
-readBwf('./__tests__/audio.bwf', function(err, info) {
+readBwf('./__tests__/audio.bwf', function (err, info) {
   if (err) console.error(err, info);
   else console.log(info);
 });
@@ -45,7 +45,7 @@ const { readSync: readSyncBwf } = require('node-bwf-wav-file-reader');
 ```typescript
 import * as bwfWavFileReader from 'node-bwf-wav-file-reader';
 
-bwfWavFileReader.read('./__tests__/audio.bwf', function(err, info) {
+bwfWavFileReader.read('./__tests__/audio.bwf', function (err, info) {
   if (err) console.error(err, info);
   else console.log(info);
 });
@@ -171,3 +171,13 @@ npm test
 npm version patch
 npm publish
 ```
+
+### Who am I
+
+**Martin RATINAUD** FullStack Developer, creator of
+
+- [Staking Crypto](https://stakingcrypto.io) - A free tool to compare staking crypto rates upon crypto exchanges
+- [Headlinker](https://headlinker.com/fr) - A community of Headhunters
+- [Remote Family](https://www.remote-family.com) - A free tool to find your sweet spot on earth based on your passions
+
+Find me on [LinkedIn](https://www.linkedin.com/in/martinratinaud)
